@@ -1,0 +1,38 @@
+sp:
+  user-service:
+    users: "[{\"id\":7, \"username\":\"abc\",\"password\":\"123\"},{\"id\":8, \"username\":\"def\",\"password\":\"456\"},{\"id\":9, \"username\":\"ghi\",\"password\":\"789\"}]"
+
+spring:
+  application:
+    name: user-service
+    
+server:
+  port: 8101
+  
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka1:2001/eureka, http://eureka2:2002/eureka
+#ribbon重试开启
+zuul:
+  retryable: true
+#重试配制
+ribbon:
+  ConnectTimeout: 1000
+  ReadTimeout: 1000
+  MaxAutoRetriesNextServer: 1
+  MaxAutoRetries: 1
+#设置hystrix访问超时时间
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 500
+#暴露 hystrix.stream 监控端点（zuul 已经包含 actuator 依赖）
+management:
+  endpoints:
+    web:
+      exposure:
+        include: hystrix.stream
